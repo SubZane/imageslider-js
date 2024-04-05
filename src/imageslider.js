@@ -77,6 +77,17 @@
 	}
 
 	var attachEvents = function () {
+		document.querySelector('.imageslider-control-fullscreen').addEventListener('click', function (e) {
+			var imageSrc = slides[currentSlide].querySelector('img').getAttribute('src')
+			var fullscreen = document.querySelector('#fullscreen .image')
+			fullscreen.style.backgroundImage = 'url(' + imageSrc + ')'
+			fullscreen.parentElement.style.display = 'block'
+		})
+
+		document.querySelector('#fullscreen').addEventListener('click', function (e) {
+			e.currentTarget.style.display = 'none'
+		})
+
 		indicators.map(function (element) {
 			element.addEventListener('click', function (e) {
 				setIndicators(e.target)
