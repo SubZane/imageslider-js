@@ -17,6 +17,7 @@
 	var supports = !!document.querySelector && !!root.addEventListener // Feature test
 	var settings
 	var currentSlide = Number(0)
+	var nextSlide = Number(0)
 	var slides = []
 	var thumbnails = []
 	var indicators = []
@@ -41,7 +42,6 @@
 		indicators.map(function (element) {
 			element.classList.remove('active')
 		})
-
 		activeIndicator.classList.add('active')
 	}
 
@@ -59,29 +59,44 @@
 		thumbnails[active].classList.add('active')
 	}
 
-	var setActiveSlide = function (nextSlide) {
-		slides.map(function (element) {
-			element.classList.remove('active')
-		})
-		if (currentSlide < nextSlide) {
-			//slides[nextSlide].classList.add('imageslider-item-start')
-			//slides[currentSlide].classList.add('imageslider-item-start')
-		} else {
-		}
+	const reflow = (element) => {
+		element.offsetHeight
+	}
+
+	var setActiveSlide = function () {
+		console.log('currentSlide', currentSlide)
 		console.log('nextSlide', nextSlide)
-		console.log('slides[nextSlide]', slides[nextSlide])
-		slides[nextSlide].classList.add('active')
-		currentSlide = nextSlide
+		var directionalClassName = currentSlide < nextSlide ? 'imageslider-item-start' : 'imageslider-item-end'
+		var orderClassName = currentSlide < nextSlide ? 'imageslider-item-next' : 'imageslider-item-prev'
+
+		slides[nextSlide].classList.add(orderClassName)
+
+		reflow(slides[nextSlide])
+
+		slides[currentSlide].classList.add(directionalClassName)
+		slides[nextSlide].classList.add(directionalClassName)
+
 		setActiveIndicator(nextSlide)
 		setActiveThumbnail(nextSlide)
 	}
 
 	var attachEvents = function () {
+		slides.map(function (element) {
+			element.addEventListener('transitionend', (event) => {
+				console.log('transitionend', event.currentTarget)
+
+				if (event.currentTarget.classList.contains('active')) {
+					event.currentTarget.classList.remove('active', 'imageslider-item-start', 'imageslider-item-end', 'imageslider-item-next', 'imageslider-item-prev')
+				} else {
+					event.currentTarget.classList.remove('imageslider-item-start', 'imageslider-item-end', 'imageslider-item-next', 'imageslider-item-prev')
+					event.currentTarget.classList.add('active')
+				}
+
+				currentSlide = nextSlide
+			})
+		})
 		document.querySelector('.imageslider-control-fullscreen').addEventListener('click', function (e) {
-			var imageSrc = slides[currentSlide].querySelector('img').getAttribute('src')
-			var fullscreen = document.querySelector('#fullscreen .image')
-			fullscreen.style.backgroundImage = 'url(' + imageSrc + ')'
-			fullscreen.parentElement.style.display = 'block'
+			slides[currentSlide].querySelector('img').classList.add('fullscreen')
 		})
 
 		document.querySelector('#fullscreen').addEventListener('click', function (e) {
@@ -91,38 +106,35 @@
 		indicators.map(function (element) {
 			element.addEventListener('click', function (e) {
 				setIndicators(e.target)
-				var nextSlide = Number(element.getAttribute('data-slide-to'))
-				setActiveSlide(nextSlide)
+				nextSlide = Number(element.getAttribute('data-slide-to'))
+				setActiveSlide()
 			})
 		})
 
 		thumbnails.map(function (element) {
 			element.addEventListener('click', function (e) {
 				setIndicators(e.target)
-				var nextSlide = Number(element.getAttribute('data-slide-to'))
-				setActiveSlide(nextSlide)
+				nextSlide = Number(element.getAttribute('data-slide-to'))
+				setActiveSlide()
 			})
 		})
 
 		prevButton.addEventListener('click', function (e) {
-			console.log('currentSlide', currentSlide)
-			console.log('slides.length', slides.length)
 			if (currentSlide === 0) {
-				setActiveSlide(slides.length - 1)
+				nextSlide = slides.length - 1
 			} else {
-				setActiveSlide(currentSlide - 1)
+				nextSlide = currentSlide - 1
 			}
+			setActiveSlide()
 		})
 
 		nextButton.addEventListener('click', function (e) {
-			console.log('currentSlide', currentSlide)
-			console.log('slides.length', slides.length)
 			if (currentSlide >= slides.length - 1) {
-				setActiveSlide(0)
+				nextSlide = 0
 			} else {
-				var nextSlide = currentSlide + 1
-				setActiveSlide(nextSlide)
+				nextSlide = currentSlide + 1
 			}
+			setActiveSlide()
 		})
 
 		hook('OnAttachEvents')
@@ -224,11 +236,6 @@
 		})
 
 		Array.from(document.querySelectorAll('.imageslider-item')).forEach((el) => {
-			el.addEventListener('transitionend', (event) => {
-				console.log('transitionend')
-				el.classList.remove('imageslider-item-start')
-				el.classList.remove('imageslider-item-end')
-			})
 			slides.push(el)
 		})
 		slideCount = Number(slides.length)
