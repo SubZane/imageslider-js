@@ -1,0 +1,19 @@
+.transition-slide {
+	.imageslider-item-next:not(.imageslider-item-start),
+	.active.imageslider-item-end {
+		transform: translateX(100%);
+	}
+
+	.imageslider-item-prev:not(.imageslider-item-end),
+	.active.imageslider-item-start {
+		transform: translateX(-100%);
+	}
+
+	.animate-offset-right {
+		transform: translateX(100%);
+	}
+
+	.animate-offset-left {
+		transform: translateX(-100%);
+	}
+}

@@ -8,20 +8,18 @@
 }
 
 #fullscreen {
-	display: none;
-	position: absolute;
+	visibility: hidden;
 	z-index: 9999;
-
 	width: 0;
 	height: 0;
 	background-color: black;
-	padding: 40px;
-	transition-property: width, height;
-	transition: 2s;
+	transition-property: width, height, padding;
+	transition: 0.7s;
 	position: absolute;
 	left: calc(50% - 50px);
 	top: calc(50% - 50px);
 	&.show {
+		padding: 40px;
 		bottom: 0;
 		top: 0;
 		left: 0;

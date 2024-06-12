@@ -10,28 +10,15 @@
 		width: 100%;
 		display: block;
 	}
+	.video {
+		width: 100%;
+		aspect-ratio: 16/9;
+		vertical-align: bottom;
+	}
 }
 
 .imageslider-item.active,
 .imageslider-item-next,
 .imageslider-item-prev {
 	display: block;
-}
-
-.imageslider-item-next:not(.imageslider-item-start),
-.active.imageslider-item-end {
-	transform: translateX(100%);
-}
-
-.imageslider-item-prev:not(.imageslider-item-end),
-.active.imageslider-item-start {
-	transform: translateX(-100%);
-}
-
-.animate-offset-right {
-	transform: translateX(100%);
-}
-
-.animate-offset-left {
-	transform: translateX(-100%);
 }

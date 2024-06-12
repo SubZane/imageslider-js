@@ -2,6 +2,9 @@
 .imageslider-control-next {
 	position: absolute;
 	top: 25%;
+	@include media-breakpoint-down(sm) {
+		top: 5%;
+	}
 	bottom: 25%;
 	z-index: 1;
 	display: flex;
@@ -42,6 +45,10 @@
 		transform: rotate(45deg);
 	}
 }
+
+@include media-breakpoint-down(sm) {
+}
+
 .imageslider-control-fullscreen {
 	.imageslider-fullscreen {
 		background-image: url('../src/img/fullscreen-icon.svg');
@@ -61,6 +68,10 @@
 		&:hover {
 			opacity: 1;
 		}
+	}
+
+	@media (max-width: 575.98px) {
+		display: none;
 	}
 }
 
@@ -97,5 +108,8 @@
 		&hover {
 			opacity: 1;
 		}
+	}
+	@media (max-width: 575.98px) {
+		display: none;
 	}
 }

@@ -42,6 +42,7 @@
 		indicators.map(function (element) {
 			element.classList.remove('active')
 		})
+
 		activeIndicator.classList.add('active')
 	}
 
@@ -97,10 +98,18 @@
 		})
 		document.querySelector('.imageslider-control-fullscreen').addEventListener('click', function (e) {
 			slides[currentSlide].querySelector('img').classList.add('fullscreen')
+			const fs_image_url = slides[currentSlide].querySelector('img').getAttribute('src')
+
+			const FullScreenContainer = document.getElementById('fullscreen')
+
+			document.querySelector('#fullscreen .image').style.backgroundImage = 'url(' + fs_image_url + ')'
+			document.querySelector('#fullscreen').style.visibility = 'visible'
+			document.querySelector('#fullscreen').classList.add('show')
 		})
 
 		document.querySelector('#fullscreen').addEventListener('click', function (e) {
-			e.currentTarget.style.display = 'none'
+			e.currentTarget.style.visibility = 'hidden'
+			e.currentTarget.classList.remove('show')
 		})
 
 		indicators.map(function (element) {

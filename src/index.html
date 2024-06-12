@@ -8,11 +8,11 @@
 		<link href="../dist/imageslider.css" rel="stylesheet" crossorigin="anonymous" />
 	</head>
 	<body>
-		<div id="fullscreen"><div class="image"></div></div>
+		<div id="fullscreen" class="hide"><div class="image"></div></div>
 		<div class="container">
 			<div class="row">
 				<div class="col">
-					<div class="imageslider-js">
+					<div class="imageslider-js transition-slide">
 						<div class="imageslider-inner">
 							<div class="imageslider-indicators">
 								<button type="button" data-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -27,6 +27,7 @@
 								<button type="button" data-slide-to="9" aria-label="Slide 10"></button>
 								<button type="button" data-slide-to="10" aria-label="Slide 11"></button>
 								<button type="button" data-slide-to="11" aria-label="Slide 12"></button>
+								<button type="button" data-slide-to="12" aria-label="Slide 13"></button>
 							</div>
 
 							<div class="imageslider-item active">
@@ -125,6 +126,18 @@
 								</div>
 							</div>
 
+							<div class="imageslider-item">
+								<iframe
+									class="video youtube"
+									src="https://www.youtube-nocookie.com/embed/xBk7Lywi7w0?si=HE-YlAqIJ6YRQx_T"
+									title="YouTube video player"
+									frameborder="0"
+									allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+									referrerpolicy="strict-origin-when-cross-origin"
+									allowfullscreen
+								></iframe>
+							</div>
+
 							<button class="imageslider-control-fullscreen full-screen-icon" type="button">
 								<span class="imageslider-fullscreen" aria-hidden="true"></span>
 								<span class="visually-hidden">Previous</span>
@@ -142,42 +155,47 @@
 						</div>
 
 						<div class="imageslider-thumbs">
-							<button class="imageslider-thumbitem active" type="button" data-slide-to="0">
-								<img src="img/img_unsplash_1.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="1">
-								<img src="img/img_unsplash_2.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="2">
-								<img src="img/img_unsplash_3.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="3">
-								<img src="img/img_unsplash_4.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="4">
-								<img src="img/img_unsplash_5.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="5">
-								<img src="img/img_unsplash_6.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="6">
-								<img src="img/img_unsplash_7.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="7">
-								<img src="img/img_unsplash_8.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="8">
-								<img src="img/img_unsplash_9.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="9">
-								<img src="img/img_unsplash_10.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="10">
-								<img src="img/img_unsplash_11.jpg" width="75" height="75" alt="" />
-							</button>
-							<button class="imageslider-thumbitem" type="button" data-slide-to="11">
-								<img src="img/img_unsplash_12.jpg" width="75" height="75" alt="" />
-							</button>
+							<div class="imageslider-thumbs-inner">
+								<button class="imageslider-thumbitem active" type="button" data-slide-to="0">
+									<img src="img/img_unsplash_1.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="1">
+									<img src="img/img_unsplash_2.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="2">
+									<img src="img/img_unsplash_3.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="3">
+									<img src="img/img_unsplash_4.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="4">
+									<img src="img/img_unsplash_5.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="5">
+									<img src="img/img_unsplash_6.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="6">
+									<img src="img/img_unsplash_7.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="7">
+									<img src="img/img_unsplash_8.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="8">
+									<img src="img/img_unsplash_9.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="9">
+									<img src="img/img_unsplash_10.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="10">
+									<img src="img/img_unsplash_11.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="11">
+									<img src="img/img_unsplash_12.jpg" width="75" height="75" alt="" />
+								</button>
+								<button class="imageslider-thumbitem" type="button" data-slide-to="12">
+									<img src="img/img_unsplash_12.jpg" width="75" height="75" alt="" />
+								</button>
+							</div>
 						</div>
 					</div>
 				</div>

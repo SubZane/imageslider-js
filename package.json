@@ -37,5 +37,7 @@
 		"*.md",
 		"LICENSE-MIT"
 	],
-	"dependencies": {}
+	"dependencies": {
+		"bootstrap": "^5.3.3"
+	}
 }
