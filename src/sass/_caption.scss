@@ -1,20 +1,22 @@
-.imageslider-caption {
-	padding-top: 1rem;
-	padding-bottom: 1rem;
-	color: #fff;
-	background-color: #000;
-	text-align: center;
-	h5 {
-		font-size: 16px;
-		font-weight: bold;
-	}
-	p {
-		font-size: 12px;
-		margin-bottom: 0;
+@include media-max-width(sm) {
+	.imageslider-caption {
+		padding-top: 1rem;
+		padding-bottom: 1rem;
+		color: #fff;
+		background-color: #000;
+		text-align: center;
+		h5 {
+			font-size: 16px;
+			font-weight: bold;
+		}
+		p {
+			font-size: 12px;
+			margin-bottom: 0;
+		}
 	}
 }
 
-@include media-breakpoint-up(md) {
+@include media-min-width(md) {
 	.imageslider-caption {
 		position: absolute;
 		right: 15%;

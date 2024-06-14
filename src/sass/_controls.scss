@@ -2,7 +2,7 @@
 .imageslider-control-next {
 	position: absolute;
 	top: 25%;
-	@include media-breakpoint-down(sm) {
+	@include media-max-width(sm) {
 		top: 5%;
 	}
 	bottom: 25%;
@@ -46,9 +46,6 @@
 	}
 }
 
-@include media-breakpoint-down(sm) {
-}
-
 .imageslider-control-fullscreen {
 	.imageslider-fullscreen {
 		background-image: url('../src/img/fullscreen-icon.svg');
@@ -70,7 +67,7 @@
 		}
 	}
 
-	@media (max-width: 575.98px) {
+	@include media-max-width(sm) {
 		display: none;
 	}
 }
