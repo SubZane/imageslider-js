@@ -23,6 +23,7 @@
 	var indicators = []
 	var nextButton
 	var prevButton
+	var touchPosition
 	var slideCount = Number(0)
 	var el
 
@@ -81,8 +82,52 @@
 		setActiveThumbnail(nextSlide)
 	}
 
+	var prev = function () {
+		if (currentSlide === 0) {
+			nextSlide = slides.length - 1
+		} else {
+			nextSlide = currentSlide - 1
+		}
+		setActiveSlide()
+	}
+
+	var next = function () {
+		if (currentSlide >= slides.length - 1) {
+			nextSlide = 0
+		} else {
+			nextSlide = currentSlide + 1
+		}
+		setActiveSlide()
+	}
+
 	var attachEvents = function () {
 		slides.map(function (element) {
+			element.addEventListener('touchstart', function (e) {
+				const touchDown = e.touches[0].clientX
+				touchPosition = touchDown
+			})
+			element.addEventListener('touchmove', function (e) {
+				const touchDown = touchPosition
+
+				if (touchDown === null) {
+					return
+				}
+
+				const currentTouch = e.touches[0].clientX
+				const diff = touchDown - currentTouch
+
+				if (diff > 5) {
+					//console.log('next slide')
+					next()
+				}
+
+				if (diff < -5) {
+					prev()
+					//console.log('prev slide')
+				}
+
+				touchPosition = null
+			})
 			element.addEventListener('transitionend', (event) => {
 				console.log('transitionend', event.currentTarget)
 
@@ -96,6 +141,7 @@
 				currentSlide = nextSlide
 			})
 		})
+
 		document.querySelector('.imageslider-control-fullscreen').addEventListener('click', function (e) {
 			slides[currentSlide].querySelector('img').classList.add('fullscreen')
 			const fs_image_url = slides[currentSlide].querySelector('img').getAttribute('src')
@@ -129,21 +175,11 @@
 		})
 
 		prevButton.addEventListener('click', function (e) {
-			if (currentSlide === 0) {
-				nextSlide = slides.length - 1
-			} else {
-				nextSlide = currentSlide - 1
-			}
-			setActiveSlide()
+			prev()
 		})
 
 		nextButton.addEventListener('click', function (e) {
-			if (currentSlide >= slides.length - 1) {
-				nextSlide = 0
-			} else {
-				nextSlide = currentSlide + 1
-			}
-			setActiveSlide()
+			next()
 		})
 
 		hook('OnAttachEvents')

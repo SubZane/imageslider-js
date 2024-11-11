@@ -1,38 +1,39 @@
-(function (root, factory) {
-	if (typeof define === "function" && define.amd) {
-		define([], factory(root));
-	} else if (typeof exports === "object") {
-		module.exports = factory(root);
+;(function (root, factory) {
+	if (typeof define === 'function' && define.amd) {
+		define([], factory(root))
+	} else if (typeof exports === 'object') {
+		module.exports = factory(root)
 	} else {
-		root.imageSlider = factory(root);
+		root.imageSlider = factory(root)
 	}
-})(typeof global !== "undefined" ? global : this.window || this.global, function (root) {
-	"use strict";
+})(typeof global !== 'undefined' ? global : this.window || this.global, function (root) {
+	'use strict'
 
 	//
 	// Variables
 	//
 
-	var imageSlider = {}; // Object for public APIs
-	var supports = !!document.querySelector && !!root.addEventListener; // Feature test
-	var settings;
-	var currentSlide = Number(0);
-	var nextSlide = Number(0);
-	var slides = [];
-	var thumbnails = [];
-	var indicators = [];
-	var nextButton;
-	var prevButton;
-	var slideCount = Number(0);
-	var el;
+	var imageSlider = {} // Object for public APIs
+	var supports = !!document.querySelector && !!root.addEventListener // Feature test
+	var settings
+	var currentSlide = Number(0)
+	var nextSlide = Number(0)
+	var slides = []
+	var thumbnails = []
+	var indicators = []
+	var nextButton
+	var prevButton
+	var touchPosition
+	var slideCount = Number(0)
+	var el
 
 	// Default settings
 	var defaults = {
-		initClass: "imageslider-js",
+		initClass: 'imageslider-js',
 		onInit: function () {},
 		OnAttachEvents: function () {},
 		onDestroy: function () {},
-	};
+	}
 
 	//
 	// Methods
@@ -40,128 +41,149 @@
 
 	var setIndicators = function (activeIndicator) {
 		indicators.map(function (element) {
-			element.classList.remove("active");
-		});
+			element.classList.remove('active')
+		})
 
-		activeIndicator.classList.add("active");
-	};
+		activeIndicator.classList.add('active')
+	}
 
 	var setActiveIndicator = function (active) {
 		indicators.map(function (element) {
-			element.classList.remove("active");
-		});
-		indicators[active].classList.add("active");
-	};
+			element.classList.remove('active')
+		})
+		indicators[active].classList.add('active')
+	}
 
 	var setActiveThumbnail = function (active) {
 		thumbnails.map(function (element) {
-			element.classList.remove("active");
-		});
-		thumbnails[active].classList.add("active");
-	};
+			element.classList.remove('active')
+		})
+		thumbnails[active].classList.add('active')
+	}
 
 	const reflow = (element) => {
-		element.offsetHeight;
-	};
+		element.offsetHeight
+	}
 
 	var setActiveSlide = function () {
-		console.log("currentSlide", currentSlide);
-		console.log("nextSlide", nextSlide);
-		var directionalClassName = currentSlide < nextSlide ? "imageslider-item-start" : "imageslider-item-end";
-		var orderClassName = currentSlide < nextSlide ? "imageslider-item-next" : "imageslider-item-prev";
+		console.log('currentSlide', currentSlide)
+		console.log('nextSlide', nextSlide)
+		var directionalClassName = currentSlide < nextSlide ? 'imageslider-item-start' : 'imageslider-item-end'
+		var orderClassName = currentSlide < nextSlide ? 'imageslider-item-next' : 'imageslider-item-prev'
 
-		slides[nextSlide].classList.add(orderClassName);
+		slides[nextSlide].classList.add(orderClassName)
 
-		reflow(slides[nextSlide]);
+		reflow(slides[nextSlide])
 
-		slides[currentSlide].classList.add(directionalClassName);
-		if (slides[nextSlide].dataset.type === "video") {
-			document.querySelector(".imageslider-control-fullscreen").style.display = "none";
+		slides[currentSlide].classList.add(directionalClassName)
+		slides[nextSlide].classList.add(directionalClassName)
+
+		setActiveIndicator(nextSlide)
+		setActiveThumbnail(nextSlide)
+	}
+
+	var prev = function () {
+		if (currentSlide === 0) {
+			nextSlide = slides.length - 1
 		} else {
-			document.querySelector(".imageslider-control-fullscreen").style.display = "block";
+			nextSlide = currentSlide - 1
 		}
-		slides[nextSlide].classList.add(directionalClassName);
+		setActiveSlide()
+	}
 
-		setActiveIndicator(nextSlide);
-		setActiveThumbnail(nextSlide);
-	};
+	var next = function () {
+		if (currentSlide >= slides.length - 1) {
+			nextSlide = 0
+		} else {
+			nextSlide = currentSlide + 1
+		}
+		setActiveSlide()
+	}
 
 	var attachEvents = function () {
 		slides.map(function (element) {
-			element.addEventListener("transitionend", (event) => {
-				console.log("transitionend", event.currentTarget);
+			element.addEventListener('touchstart', function (e) {
+				const touchDown = e.touches[0].clientX
+				touchPosition = touchDown
+			})
+			element.addEventListener('touchmove', function (e) {
+				const touchDown = touchPosition
 
-				if (event.currentTarget.classList.contains("active")) {
-					event.currentTarget.classList.remove(
-						"active",
-						"imageslider-item-start",
-						"imageslider-item-end",
-						"imageslider-item-next",
-						"imageslider-item-prev"
-					);
-				} else {
-					event.currentTarget.classList.remove(
-						"imageslider-item-start",
-						"imageslider-item-end",
-						"imageslider-item-next",
-						"imageslider-item-prev"
-					);
-					event.currentTarget.classList.add("active");
+				if (touchDown === null) {
+					return
 				}
 
-				currentSlide = nextSlide;
-			});
-		});
-		document.querySelector(".imageslider-control-fullscreen").addEventListener("click", function (e) {
-			slides[currentSlide].querySelector("img").classList.add("fullscreen");
-			const fs_image_url = slides[currentSlide].querySelector("img").getAttribute("src");
+				const currentTouch = e.touches[0].clientX
+				const diff = touchDown - currentTouch
 
-			document.querySelector("#fullscreen .image").style.backgroundImage = "url(" + fs_image_url + ")";
-			document.querySelector("#fullscreen").style.visibility = "visible";
-			document.querySelector("#fullscreen").classList.add("show");
-		});
+				if (diff > 5) {
+					//console.log('next slide')
+					next()
+				}
 
-		document.querySelector("#fullscreen").addEventListener("click", function (e) {
-			e.currentTarget.style.visibility = "hidden";
-			e.currentTarget.classList.remove("show");
-		});
+				if (diff < -5) {
+					prev()
+					//console.log('prev slide')
+				}
+
+				touchPosition = null
+			})
+			element.addEventListener('transitionend', (event) => {
+				console.log('transitionend', event.currentTarget)
+
+				if (event.currentTarget.classList.contains('active')) {
+					event.currentTarget.classList.remove('active', 'imageslider-item-start', 'imageslider-item-end', 'imageslider-item-next', 'imageslider-item-prev')
+				} else {
+					event.currentTarget.classList.remove('imageslider-item-start', 'imageslider-item-end', 'imageslider-item-next', 'imageslider-item-prev')
+					event.currentTarget.classList.add('active')
+				}
+
+				currentSlide = nextSlide
+			})
+		})
+
+		document.querySelector('.imageslider-control-fullscreen').addEventListener('click', function (e) {
+			slides[currentSlide].querySelector('img').classList.add('fullscreen')
+			const fs_image_url = slides[currentSlide].querySelector('img').getAttribute('src')
+
+			const FullScreenContainer = document.getElementById('fullscreen')
+
+			document.querySelector('#fullscreen .image').style.backgroundImage = 'url(' + fs_image_url + ')'
+			document.querySelector('#fullscreen').style.visibility = 'visible'
+			document.querySelector('#fullscreen').classList.add('show')
+		})
+
+		document.querySelector('#fullscreen').addEventListener('click', function (e) {
+			e.currentTarget.style.visibility = 'hidden'
+			e.currentTarget.classList.remove('show')
+		})
 
 		indicators.map(function (element) {
-			element.addEventListener("click", function (e) {
-				setIndicators(e.target);
-				nextSlide = Number(element.getAttribute("data-slide-to"));
-				setActiveSlide();
-			});
-		});
+			element.addEventListener('click', function (e) {
+				setIndicators(e.target)
+				nextSlide = Number(element.getAttribute('data-slide-to'))
+				setActiveSlide()
+			})
+		})
 
 		thumbnails.map(function (element) {
-			element.addEventListener("click", function (e) {
-				setIndicators(e.target);
-				nextSlide = Number(element.getAttribute("data-slide-to"));
-				setActiveSlide();
-			});
-		});
+			element.addEventListener('click', function (e) {
+				setIndicators(e.target)
+				nextSlide = Number(element.getAttribute('data-slide-to'))
+				setActiveSlide()
+			})
+		})
 
-		prevButton.addEventListener("click", function (e) {
-			if (currentSlide === 0) {
-				nextSlide = slides.length - 1;
-			} else {
-				nextSlide = currentSlide - 1;
-			}
-			setActiveSlide();
-		});
+		prevButton.addEventListener('click', function (e) {
+			prev()
+		})
 
-		nextButton.addEventListener("click", function (e) {
-			if (currentSlide >= slides.length - 1) {
-				nextSlide = 0;
-			} else {
-				nextSlide = currentSlide + 1;
-			}
-			setActiveSlide();
-		});
+		nextButton.addEventListener('click', function (e) {
+			next()
+		})
 
-		hook("OnAttachEvents");
-	};
+		hook('OnAttachEvents')
+	}
 
 	/**
 	 * Callback hooks.
@@ -174,9 +196,9 @@
 		if (settings[hookName] !== undefined) {
 			// Call the user defined function.
 			// Scope is set to the jQuery element we are operating on.
-			settings[hookName].call(el);
+			settings[hookName].call(el)
 		}
-	};
+	}
 
 	/**
 	 * Merge defaults with user options
@@ -186,15 +208,15 @@
 	 * @returns {Object} Merged values of defaults and options
 	 */
 	var extend = function (defaults, options) {
-		var extended = {};
+		var extended = {}
 		forEach(defaults, function (value, prop) {
-			extended[prop] = defaults[prop];
-		});
+			extended[prop] = defaults[prop]
+		})
 		forEach(options, function (value, prop) {
-			extended[prop] = options[prop];
-		});
-		return extended;
-	};
+			extended[prop] = options[prop]
+		})
+		return extended
+	}
 
 	/**
 	 * A simple forEach() implementation for Arrays, Objects and NodeLists
@@ -204,18 +226,18 @@
 	 * @param {Array|Object|NodeList} scope Object/NodeList/Array that forEach is iterating over (aka `this`)
 	 */
 	var forEach = function (collection, callback, scope) {
-		if (Object.prototype.toString.call(collection) === "[object Object]") {
+		if (Object.prototype.toString.call(collection) === '[object Object]') {
 			for (var prop in collection) {
 				if (Object.prototype.hasOwnProperty.call(collection, prop)) {
-					callback.call(scope, collection[prop], prop, collection);
+					callback.call(scope, collection[prop], prop, collection)
 				}
 			}
 		} else {
 			for (var i = 0, len = collection.length; i < len; i++) {
-				callback.call(scope, collection[i], i, collection);
+				callback.call(scope, collection[i], i, collection)
 			}
 		}
-	};
+	}
 
 	/**
 	 * Destroy the current initialization.
@@ -224,21 +246,21 @@
 	imageSlider.destroy = function () {
 		// If plugin isn't already initialized, stop
 		if (!settings) {
-			return;
+			return
 		}
 
 		// Remove init class for conditional CSS
-		document.documentElement.classList.remove(settings.initClass);
+		document.documentElement.classList.remove(settings.initClass)
 
 		// @todo Undo any other init functions...
 
 		// Remove event listeners
-		document.removeEventListener("click", eventHandler, false);
+		document.removeEventListener('click', eventHandler, false)
 
 		// Reset variables
-		settings = null;
-		hook("onDestroy");
-	};
+		settings = null
+		hook('onDestroy')
+	}
 
 	/**
 	 * Initialize Plugin
@@ -248,49 +270,49 @@
 	imageSlider.init = function (options) {
 		// feature test
 		if (!supports) {
-			return;
+			return
 		}
 
-		prevButton = document.querySelector(".imageslider-control-prev");
-		nextButton = document.querySelector(".imageslider-control-next");
+		prevButton = document.querySelector('.imageslider-control-prev')
+		nextButton = document.querySelector('.imageslider-control-next')
 
-		Array.from(document.querySelectorAll(".imageslider-thumbitem")).forEach((el) => {
-			thumbnails.push(el);
-		});
+		Array.from(document.querySelectorAll('.imageslider-thumbitem')).forEach((el) => {
+			thumbnails.push(el)
+		})
 
-		Array.from(document.querySelectorAll(".imageslider-item")).forEach((el) => {
-			slides.push(el);
-		});
-		slideCount = Number(slides.length);
+		Array.from(document.querySelectorAll('.imageslider-item')).forEach((el) => {
+			slides.push(el)
+		})
+		slideCount = Number(slides.length)
 
-		Array.from(document.querySelectorAll(".imageslider-indicators button")).forEach((el) => {
-			indicators.push(el);
-			if (el.classList.contains("active")) {
-				currentSlide = Number(el.getAttribute("data-slide-to"));
+		Array.from(document.querySelectorAll('.imageslider-indicators button')).forEach((el) => {
+			indicators.push(el)
+			if (el.classList.contains('active')) {
+				currentSlide = Number(el.getAttribute('data-slide-to'))
 			}
-		});
+		})
 
 		// Destroy any existing initializations
-		imageSlider.destroy();
+		imageSlider.destroy()
 
 		// Merge user options with defaults
-		settings = extend(defaults, options || {});
+		settings = extend(defaults, options || {})
 
-		el = document.querySelector(settings.container);
+		el = document.querySelector(settings.container)
 
-		attachEvents();
+		attachEvents()
 
 		// Remove preload class when page has loaded to allow transitions/animations
 		//el.classList.remove("preload");
-		hook("onInit");
-	};
+		hook('onInit')
+	}
 
 	imageSlider.closePanels = function () {
-		close();
-	};
+		close()
+	}
 	//
 	// Public APIs
 	//
 
-	return imageSlider;
-});
+	return imageSlider
+})
