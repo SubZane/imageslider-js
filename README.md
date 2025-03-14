@@ -32,6 +32,11 @@ document.addEventListener("DOMContentLoaded", function (event) {
 });
 ```
 
+## todo
+
+- keyboard navigation
+-
+
 ## changelog
 
 #### 1.0.0

@@ -160,17 +160,21 @@
 
 		indicators.map(function (element) {
 			element.addEventListener('click', function (e) {
-				setIndicators(e.target)
 				nextSlide = Number(element.getAttribute('data-slide-to'))
-				setActiveSlide()
+				if (nextSlide !== currentSlide) {
+					setIndicators(e.target)
+					setActiveSlide()
+				}
 			})
 		})
 
 		thumbnails.map(function (element) {
 			element.addEventListener('click', function (e) {
-				setIndicators(e.target)
 				nextSlide = Number(element.getAttribute('data-slide-to'))
-				setActiveSlide()
+				if (nextSlide !== currentSlide) {
+					setIndicators(e.target)
+					setActiveSlide()
+				}
 			})
 		})
 
